@@ -56,90 +56,23 @@ def build_part1_RNN(step_size, window_size):
 
 ### TODO: list all unique characters in the text and remove any non-english ones
 def clean_text(text):
-    # find all unique characters in the text
+  import string
+  filter_list = []
 
-    unique = list((set(text)))
-    decimal = [ord(c) for c in unique]
-    comb = {k:v for k in unique for v in decimal}
-    a = dict(zip(unique,decimal))
-
-    #Prints unique characters along with decimal equivalent, useful for characters which do not have any direct corresponding key
-    print(a)
-
-    # remove as many non-english characters and character sequences as you can
-
-    #Result of the print can be seen in Jupyter notebook. This is what we get. 
-
-    '''
-    {' ': 32,
-     '!': 33,
-     '"': 34,
-     '$': 36,---> Remove
-     '%': 37,---> Remove
-     '&': 38,
-     "'": 39,
-     '(': 40,
-     ')': 41,
-     '*': 42,
-     ',': 44,
-     '-': 45,---> Remove
-     '.': 46,
-     '/': 47,
-     '0': 48,
-     '1': 49,
-     '2': 50,
-     '3': 51,
-     '4': 52,
-     '5': 53,
-     '6': 54,
-     '7': 55,
-     '8': 56,
-     '9': 57,
-     ':': 58,
-     ';': 59,
-     '?': 63,
-     '@': 64,---> Remove
-     'a': 97,
-     'b': 98,
-     'c': 99,
-     'd': 100,
-     'e': 101,
-     'f': 102,
-     'g': 103,
-     'h': 104,
-     'i': 105,
-     'j': 106,
-     'k': 107,
-     'l': 108,
-     'm': 109,
-     'n': 110,
-     'o': 111,
-     'p': 112,
-     'q': 113,
-     'r': 114,
-     's': 115,
-     't': 116,
-     'u': 117,
-     'v': 118,
-     'w': 119,
-     'x': 120,
-     'y': 121,
-     'z': 122,
-     'à': 224,---> Remove
-     'â': 226,---> Remove
-     'è': 232,----> Remove
-     'é': 233}----> Remove
-    '''
-    filter_list = [36,37,38,64,45,224,226,232,233]
+  for letter in string.ascii_lowercase:
+      filter_list.append(ord(letter))
     
-    for c in filter_list:
-        text = text.replace(chr(c),' ')
+  for punctuation in [' ', '!', ',', '.', ':', ';', '?']:
+    filter_list.append(ord(punctuation))
+
+  for c in text:
+    if ord(c) not in filter_list:
+        text = text.replace(c,' ')
     
-    # shorten any extra dead space created above
-    text = text.replace('  ',' ')
+  # shorten any extra dead space created above
+  text = text.replace('  ',' ')
 
-    return text
-
+  return text
 
 ### TODO: fill out the function below that transforms the input text and window-size into a set of input/output pairs for use with our RNN model
 def window_transform_text(text,window_size,step_size):
